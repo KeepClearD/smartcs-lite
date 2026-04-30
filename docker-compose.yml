@@ -1,0 +1,52 @@
+version: '3.9'
+
+services:
+  postgres:
+    image: pgvector/pgvector:pg17
+    container_name: smartcs-postgres
+    environment:
+      POSTGRES_DB: smartcs
+      POSTGRES_USER: smartcs
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-smartcs123}
+    ports:
+      - "5432:5432"
+    volumes:
+      - pg_data:/var/lib/postgresql/data
+      - ./schema.sql:/docker-entrypoint-initdb.d/01-schema.sql
+    command: >
+      postgres
+        -c shared_preload_libraries='vectors.so'
+        -c shared_buffers=256MB
+        -c max_connections=100
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U smartcs"]
+      interval: 5s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7-alpine
+    container_name: smartcs-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+    command: redis-server --appendonly yes --maxmemory 128mb
+
+  rustfs:
+    image: minio/minio:latest
+    container_name: smartcs-rustfs
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    environment:
+      MINIO_ROOT_USER: ${RUSTFS_ACCESS_KEY:-smartcs}
+      MINIO_ROOT_PASSWORD: ${RUSTFS_SECRET_KEY:-smartcs123456}
+    volumes:
+      - rustfs_data:/data
+    command: server /data --console-address ":9001"
+
+volumes:
+  pg_data:
+  redis_data:
+  rustfs_data:
