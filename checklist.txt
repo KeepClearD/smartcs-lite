@@ -1,0 +1,9 @@
+1. [ ] 安装 Docker、Java 21、Maven 3.9+
+2. [ ] cp .env.example .env，编辑 OPENAI_API_KEY
+3. [ ] docker compose up -d
+4. [ ] mvn clean package -DskipTests
+5. [ ] java -jar target/smartcs-lite-0.1.0-SNAPSHOT.jar
+6. [ ] 访问 http://localhost:8080/actuator/health 确认启动成功
+7. [ ] 用 curl 或前端添加知识库和 FAQ
+8. [ ] 打开 frontend/chat-widget/index.html 测试聊天
+9. [ ] cd frontend/admin-app && npm install && npm run dev 访问管理后台

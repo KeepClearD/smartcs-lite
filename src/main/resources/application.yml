@@ -1,0 +1,96 @@
+server:
+  port: ${SERVER_PORT:8080}
+  tomcat:
+    virtual-threads:
+      enabled: true
+    max-connections: 5000
+    threads:
+      max: 200
+
+spring:
+  application:
+    name: smartcs-lite
+
+  # ==================== 数据源 ====================
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:smartcs}
+    username: ${DB_USER:smartcs}
+    password: ${DB_PASSWORD:smartcs123}
+    hikari:
+      maximum-pool-size: 20
+      minimum-idle: 5
+      connection-timeout: 30000
+
+  # ==================== JPA ====================
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        dialect: org.hibernate.dialect.PostgreSQLDialect
+        format_sql: true
+
+  # ==================== Redis ====================
+  data:
+    redis:
+      host: ${REDIS_HOST:localhost}
+      port: ${REDIS_PORT:6379}
+      password: ${REDIS_PASSWORD:}
+      timeout: 3000ms
+
+  # ==================== AI ====================
+  ai:
+    openai:
+      api-key: ${OPENAI_API_KEY:sk-xxx}
+      base-url: ${OPENAI_BASE_URL:https://api.openai.com}
+      chat:
+        options:
+          model: ${OPENAI_CHAT_MODEL:gpt-4o-mini}
+          temperature: 0.3
+          max-tokens: 1024
+      embedding:
+        options:
+          model: ${OPENAI_EMBEDDING_MODEL:text-embedding-3-small}
+          dimensions: 1536
+    vectorstore:
+      pgvector:
+        index-type: HNSW
+        distance-type: COSINE_DISTANCE
+        dimensions: 1536
+        table-name: "document_chunk"
+        initialize-schema: false
+
+# ==================== SmartCS 配置 ====================
+smartcs:
+  storage:
+    endpoint: ${RUSTFS_ENDPOINT:http://localhost:9000}
+    access-key: ${RUSTFS_ACCESS_KEY:smartcs}
+    secret-key: ${RUSTFS_SECRET_KEY:smartcs123456}
+    bucket: ${RUSTFS_BUCKET:smartcs}
+
+  ai:
+    rag:
+      top-k: 3
+      similarity-threshold: 0.5
+    cache:
+      ttl-seconds: 7200
+    memory:
+      max-messages: 10
+    rate-limit:
+      qps-per-user: 2
+
+# ==================== 日志 ====================
+logging:
+  level:
+    com.smartcs.lite: DEBUG
+    org.springframework.ai: INFO
+  pattern:
+    console: "%d{HH:mm:ss} [%thread] %-5level %logger{36} - %msg%n"
+
+# ==================== Actuator ====================
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics
