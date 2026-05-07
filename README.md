@@ -1,6 +1,3 @@
-# SmartCS-Lite README.md
-
-```html
 <p align="center">
   <h1 align="center">SmartCS-Lite</h1>
   <p align="center">
@@ -8,10 +5,8 @@
   </p>
   <p align="center">
     基于 Spring Boot + Spring AI + PostgreSQL + PGvector 构建<br/>
-    4 周即可落地的可上线智能客服方案
   </p>
 </p>
-
 <p align="center">
   <img src="https://img.shields.io/badge/Java-21-007396?style=flat-square&logo=openjdk&logoColor=white" />
   <img src="https://img.shields.io/badge/Spring%20Boot-3.4-6DB33F?style=flat-square&logo=springboot&logoColor=white" />
@@ -20,7 +15,7 @@
   <img src="https://img.shields.io/badge/PGvector-0.8-336791?style=flat-square&logo=postgresql&logoColor=white" />
   <img src="https://img.shields.io/badge/License-Apache%202.0-blue?style=flat-square" />
 </p>
-```
+
 ---
 
 ## 目录
